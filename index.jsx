@@ -32,13 +32,6 @@ const App = () => {
         }
     }
 
-    const txtAction = () => {
-        if (isConnected) {
-            return 'Is Connected';
-        }
-        return 'Connect';
-    }
-
     const CheckConnect = async () => {
         if (await keplr.getKey(chainId)) {
             setIsConnected(true);
@@ -85,13 +78,18 @@ const App = () => {
                         <div className="card">
                             <div className="card-body">
                                 <h4 className="card-title">Basic Actions</h4>
-                                <button
-                                    className="btn btn-primary btn-lg btn-block mb-3"
-                                    disabled={isConnected}
-                                    onClick={onClickConnect}
-                                >
-                                    {txtAction()}
-                                </button>
+                                {isConnected
+                                    ?
+                                    <p className="text-center info-text alert alert-success">Connected</p>
+                                    :
+                                    <button
+                                        className="btn btn-primary btn-lg btn-block mb-3"
+                                        disabled={isConnected}
+                                        onClick={onClickConnect}
+                                    >
+                                        Connect
+                                    </button>
+                                }
                                 <button className="btn btn-primary btn-lg btn-block mb-3" onClick={onClickGetAccounts}>eth_accounts</button>
                                 <p className="info-text alert alert-secondary">eth_accounts result: <span>{accountsResult}</span></p>
                             </div>
