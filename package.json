@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "eslint . --ext js,json",
     "lint:fix": "eslint . --fix --ext js,json",
-    "serve": "static-server . --port 9011",
+    "serve": "static-server . --port 9000",
     "test": "yarn lint"
   },
   "repository": {

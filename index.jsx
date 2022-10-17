@@ -1,17 +1,22 @@
 const { useState, useEffect, useMemo } = React;
 
 const App = () => {
-    const [isMetamaskInstalled, setIsMetamaskInstalled] = useState(false);
+    const [isInstalled, setIsInstalled] = useState(false);
+    const [isConnected, setIsConnected] = useState(false);
     const [accountsResult, setAccountsResult] = useState();
+    const [txtState, setTxtAction] = useState('Click here to install MetaMask!');
+    const chainId = "cosmoshub-4";
 
     // @ts-ignore
-    const { ethereum } = window;
+    const { keplr } = window;
 
     const onClickConnect = async () => {
         try {
-            // Will open the MetaMask UI
-            // You should disable this button while the request is pending!
-            await ethereum.request({ method: 'eth_requestAccounts' });
+            // Enabling before using the Keplr is recommended.
+            // This method will ask the user whether to allow access if they haven't visited this website.
+            // Also, it will request that the user unlock the wallet if the wallet is locked.
+            await keplr.enable(chainId);
+            setIsConnected(true);
         } catch (error) {
             console.error(error);
         }
@@ -19,30 +24,39 @@ const App = () => {
 
     const onClickGetAccounts = async () => {
         try {
-            const accounts = await ethereum.request({ method: 'eth_accounts' });
-            setAccountsResult(accounts[0] || 'Not able to get accounts')
+            const offlineSigner = await keplr.getOfflineSigner(chainId);
+            const accounts = await offlineSigner.getAccounts();
+            setAccountsResult(accounts[0].address || 'Not able to get accounts')
         } catch (error) {
             console.error(error);
         }
-
     }
 
-    const txtAction = useMemo(() => {
-        if (isMetamaskInstalled) {
-            return 'Connect';
+    const txtAction = () => {
+        if (isConnected) {
+            return 'Is Connected';
         }
-        return 'Click here to install MetaMask!';
-    }, [isMetamaskInstalled]);
+        return 'Connect';
+    }
 
-    const isMetamaskConnected = () => {
-        return Boolean(ethereum && ethereum.isMetaMask);
+    const CheckConnect = async () => {
+        if (await keplr.getKey(chainId)) {
+            setIsConnected(true);
+            return;
+        }
+        setIsConnected(false);
+        return;
     }
 
     useEffect(() => {
-        if (isMetamaskConnected()) {
-            setIsMetamaskInstalled(true);
+        CheckConnect();
+    }, [])
+
+    useEffect(() => {
+        if (keplr) {
+            setIsInstalled(true);
         }
-    }, []);
+    })
 
     return (
         <main className="container-fluid">
@@ -73,10 +87,10 @@ const App = () => {
                                 <h4 className="card-title">Basic Actions</h4>
                                 <button
                                     className="btn btn-primary btn-lg btn-block mb-3"
-                                    disabled={!isMetamaskInstalled}
+                                    disabled={isConnected}
                                     onClick={onClickConnect}
                                 >
-                                    {txtAction}
+                                    {txtAction()}
                                 </button>
                                 <button className="btn btn-primary btn-lg btn-block mb-3" onClick={onClickGetAccounts}>eth_accounts</button>
                                 <p className="info-text alert alert-secondary">eth_accounts result: <span>{accountsResult}</span></p>
