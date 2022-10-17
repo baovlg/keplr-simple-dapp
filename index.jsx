@@ -91,7 +91,7 @@ const App = () => {
                                     </button>
                                 }
                                 <button className="btn btn-primary btn-lg btn-block mb-3" onClick={onClickGetAccounts}>Get accounts</button>
-                                <p className="info-text alert alert-secondary">accounts result: <span>{accountsResult}</span></p>
+                                <p className="info-text alert alert-secondary">accounts result: <span className="alert-success">{accountsResult}</span></p>
                             </div>
                         </div>
                     </div>
