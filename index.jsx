@@ -58,7 +58,7 @@ const App = () => {
                 {/* <img id="mm-logo" src="metamask-fox.svg"></img> */}
             </header>
             {/* Part 1 Setting up Basic Actions and Status*/}
-            <section>
+            <section style={{ display: "none" }}>
                 <h3 className="card-title">Status</h3>
                 <div className="row">
                     <div className="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
@@ -90,15 +90,15 @@ const App = () => {
                                         Connect
                                     </button>
                                 }
-                                <button className="btn btn-primary btn-lg btn-block mb-3" onClick={onClickGetAccounts}>eth_accounts</button>
-                                <p className="info-text alert alert-secondary">eth_accounts result: <span>{accountsResult}</span></p>
+                                <button className="btn btn-primary btn-lg btn-block mb-3" onClick={onClickGetAccounts}>Get accounts</button>
+                                <p className="info-text alert alert-secondary">accounts result: <span>{accountsResult}</span></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
             {/* /Part 1 */}
-            <section>
+            <section style={{ display: "none" }}>
                 {/* Part 2 Contract*/}
                 <div className="row">
                     <div className="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12 d-flex align-items-stretch">
